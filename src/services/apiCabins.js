@@ -1,14 +1,23 @@
 import supabase from "services/supabase";
 
 async function getCabins() {
-  try {
-    const { data, error } = await supabase.from("cabins").select("*");
+  const { data, error } = await supabase.from("cabins").select("*");
 
-    return data;
-  } catch (err) {
-    console.log(err.message);
-    throw new Error("Unable to load all cabins.");
+  if (error) {
+    console.log(error.message);
+    throw new Error("Failed to load all cabins.");
+  }
+
+  return data;
+}
+
+async function deleteCabin(id) {
+  const { error } = await supabase.from("cabins").delete().eq("id", id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(`Failed to delete the cabin with the id: ${id}`);
   }
 }
 
-export { getCabins };
+export { deleteCabin, getCabins };
