@@ -40,6 +40,7 @@ function CreateCabinForm({ cabinEdit = {} }) {
 
   function onErrorForm(errors) {
     // another way to handle errors with React Form hook instead of using formState
+    console.log(errors);
   }
 
   return (
