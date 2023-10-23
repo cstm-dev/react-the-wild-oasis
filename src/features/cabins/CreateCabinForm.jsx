@@ -1,5 +1,5 @@
 import useCreateCabin from "features/cabins/useCreateCabin.js";
-import useEditCabin from "features/cabins/useEditCabin.js";
+import useUpdateCabin from "features/cabins/useUpdateCabin.js";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 
@@ -21,7 +21,7 @@ function CreateCabinForm({ cabinEdit = {} }) {
     defaultValues: isEditSession ? editValues : {},
   });
   const { isLoading: isCreating, mutate: createCabin } = useCreateCabin();
-  const { isLoading: isEditing, mutate: editCabin } = useEditCabin();
+  const { isLoading: isEditing, mutate: updateCabin } = useUpdateCabin();
   const isWorking = isCreating || isEditing;
   const { errors } = formState;
 
@@ -29,7 +29,7 @@ function CreateCabinForm({ cabinEdit = {} }) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession) {
-      editCabin(
+      updateCabin(
         { cabin: { ...data, image }, id: editId },
         { onSuccess: reset() }
       );
