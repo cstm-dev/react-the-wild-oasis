@@ -1,3 +1,14 @@
+import PropTypes from "prop-types";
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
+import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -48,3 +59,79 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+Modal.propTypes = {
+  children: PropTypes.node,
+};
+
+Open.propTypes = {
+  children: PropTypes.node,
+  modalWindowOpen: PropTypes.string,
+};
+
+Window.propTypes = {
+  children: PropTypes.node,
+  modalWindowName: PropTypes.string,
+};
+
+const ModalContext = createContext();
+
+Modal.Open = Open;
+Modal.Window = Window;
+
+function Modal({ children }) {
+  const [modalName, setModalName] = useState("");
+
+  function handleClose() {
+    setModalName("");
+  }
+
+  function handleOpen(modalName) {
+    setModalName(modalName);
+  }
+
+  return (
+    <ModalContext.Provider value={{ modalName, handleClose, handleOpen }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+function Open({ children, modalWindowOpen }) {
+  const { handleOpen } = useContext(ModalContext);
+
+  return cloneElement(children, { onClick: () => handleOpen(modalWindowOpen) });
+}
+
+function Window({ children, modalWindowName }) {
+  const { modalName, handleClose } = useContext(ModalContext);
+  const selector = useRef();
+
+  useEffect(() => {
+    function handleClick(e) {
+      if (selector.current && !selector.current.contains(e.target))
+        handleClose();
+    }
+
+    document.addEventListener("click", handleClick, true);
+
+    return () => document.removeEventListener("click", handleClick, true);
+  }, [handleClose]);
+
+  if (modalName !== modalWindowName) return null;
+
+  return createPortal(
+    <Overlay>
+      <StyledModal ref={selector}>
+        <Button onClick={handleClose}>
+          <HiXMark />
+        </Button>
+
+        <div>{cloneElement(children, { onCloseModal: handleClose })}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+export default Modal;
