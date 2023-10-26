@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { createContext, useContext } from "react";
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -58,3 +60,64 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+Table.propTypes = {
+  children: PropTypes.node,
+  cols: PropTypes.string,
+};
+
+Header.propTypes = {
+  children: PropTypes.node,
+};
+
+Row.propTypes = {
+  children: PropTypes.node,
+};
+
+Body.propTypes = {
+  data: PropTypes.array,
+  render: PropTypes.func,
+};
+
+const TableContext = createContext();
+
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+Table.Footer = Footer;
+
+function Table({ cols, children }) {
+  return (
+    <TableContext.Provider value={{ cols }}>
+      <StyledTable role="table">{children}</StyledTable>
+    </TableContext.Provider>
+  );
+}
+
+function Header({ children }) {
+  const { cols } = useContext(TableContext);
+
+  return (
+    <StyledHeader role="row" as="header" columns={cols}>
+      {children}
+    </StyledHeader>
+  );
+}
+
+function Row({ children }) {
+  const { cols } = useContext(TableContext);
+
+  return (
+    <StyledRow role="row" columns={cols}>
+      {children}
+    </StyledRow>
+  );
+}
+
+function Body({ data, render }) {
+  if (!data) return <Empty>No data available</Empty>;
+
+  return <StyledBody>{data.map(render)}</StyledBody>;
+}
+
+export default Table;
