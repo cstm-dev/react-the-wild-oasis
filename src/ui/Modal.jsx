@@ -1,12 +1,6 @@
+import useOutsideClick from "hooks/useOutsideClick.js";
 import PropTypes from "prop-types";
-import {
-  cloneElement,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
@@ -105,18 +99,7 @@ function Open({ children, modalWindowOpen }) {
 
 function Window({ children, modalWindowName }) {
   const { modalName, handleClose } = useContext(ModalContext);
-  const selector = useRef();
-
-  useEffect(() => {
-    function handleClick(e) {
-      if (selector.current && !selector.current.contains(e.target))
-        handleClose();
-    }
-
-    document.addEventListener("click", handleClick, true);
-
-    return () => document.removeEventListener("click", handleClick, true);
-  }, [handleClose]);
+  const { selector } = useOutsideClick(handleClose);
 
   if (modalName !== modalWindowName) return null;
 
@@ -135,3 +118,4 @@ function Window({ children, modalWindowName }) {
 }
 
 export default Modal;
+export { ModalContext };
