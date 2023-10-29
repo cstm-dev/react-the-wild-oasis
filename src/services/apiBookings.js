@@ -1,12 +1,22 @@
+import PropTypes from "prop-types";
 import { getToday } from "utils/helpers";
 import supabase from "./supabase";
 
-async function getBookings() {
-  const { data, error } = await supabase
+getBookings.propTypes = {
+  filter: PropTypes.object,
+  sortBy: PropTypes.string,
+};
+
+async function getBookings({ filter, sortBy }) {
+  let query = supabase
     .from("bookings")
     .select(
       "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, guests_bookings(*, guests(firstName, lastName, email)), cabins(name)"
     );
+
+  if (filter !== null) query = query.eq(filter.field, filter.value);
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);

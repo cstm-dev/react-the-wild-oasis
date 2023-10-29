@@ -27,6 +27,12 @@ const Stacked = styled.div`
   & span:nth-child(even) {
     color: var(--color-grey-500);
     font-size: 1.2rem;
+    border-bottom: solid var(--color-grey-300) 1px;
+    padding-bottom: 3px;
+  }
+
+  & span:last-child {
+    border: none;
   }
 `;
 
