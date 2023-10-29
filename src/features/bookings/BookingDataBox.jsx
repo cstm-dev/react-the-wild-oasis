@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
   HiOutlineChatBubbleBottomCenterText,
@@ -6,11 +5,13 @@ import {
   HiOutlineCurrencyDollar,
   HiOutlineHomeModern,
 } from "react-icons/hi2";
+import styled from "styled-components";
 
 import DataItem from "ui/DataItem";
 import { Flag } from "ui/Flag";
 
-import { formatDistanceFromNow, formatCurrency } from "utils/helpers";
+import PropTypes from "prop-types";
+import { formatCurrency, formatDistanceFromNow } from "utils/helpers";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -101,6 +102,10 @@ const Footer = styled.footer`
   text-align: right;
 `;
 
+BookingDataBox.propTypes = {
+  booking: PropTypes.object,
+};
+
 // A purely presentational component
 function BookingDataBox({ booking }) {
   const {
@@ -115,7 +120,7 @@ function BookingDataBox({ booking }) {
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
+    guests_bookings,
     cabins: { name: cabinName },
   } = booking;
 
@@ -139,16 +144,24 @@ function BookingDataBox({ booking }) {
       </Header>
 
       <Section>
-        <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
-          <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
-          </p>
-          <span>&bull;</span>
-          <p>{email}</p>
-          <span>&bull;</span>
-          <p>National ID {nationalID}</p>
-        </Guest>
+        {guests_bookings.map((entry) => (
+          <Guest key={entry.id}>
+            {entry.guests.countryFlag && (
+              <Flag
+                src={entry.guests.countryFlag}
+                alt={`Flag of ${entry.guests.country}`}
+              />
+            )}
+            <p>
+              {`${entry.guests.firstName} ${entry.guests.lastName}`}{" "}
+              {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
+            </p>
+            <span>&bull;</span>
+            <p>{entry.guests.email}</p>
+            <span>&bull;</span>
+            <p>National ID {entry.guests.nationalId}</p>
+          </Guest>
+        ))}
 
         {observations && (
           <DataItem
