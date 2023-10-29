@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { PAGE_SIZE } from "utils/globalConstants.js";
 import { getToday } from "utils/helpers";
 import supabase from "./supabase";
 
@@ -7,27 +8,36 @@ getBookings.propTypes = {
   sortBy: PropTypes.string,
 };
 
-async function getBookings({ filter, sortBy }) {
+async function getBookings({ filter, sortBy, page }) {
   let query = supabase
     .from("bookings")
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, guests_bookings(*, guests(firstName, lastName, email)), cabins(name)"
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, guests_bookings(*, guests(firstName, lastName, email)), cabins(name)",
+      { count: "exact" }
     );
 
   if (filter) query = query.eq(filter.field, filter.value);
+
   if (sortBy)
     query = query.order(sortBy.field, {
       ascending: sortBy.direction === "asc",
     });
 
-  const { data, error } = await query;
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    query = query.range(from, to);
+  }
+
+  const { data, error, count } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("No bookings found");
   }
 
-  return data;
+  return { data, count };
 }
 
 async function getBooking(id) {

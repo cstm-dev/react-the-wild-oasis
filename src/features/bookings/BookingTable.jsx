@@ -2,11 +2,12 @@ import BookingRow from "features/bookings/BookingRow.jsx";
 import useGetBookings from "features/bookings/useGetBookings.js";
 import Empty from "ui/Empty.jsx";
 import Menus from "ui/Menus";
+import Pagination from "ui/Pagination.jsx";
 import Spinner from "ui/Spinner.jsx";
 import Table from "ui/Table";
 
 function BookingTable() {
-  const { data: bookings, isLoading } = useGetBookings();
+  const { bookings, count, isLoading } = useGetBookings();
 
   if (!bookings?.length) return <Empty resource="bookings" />;
 
@@ -30,6 +31,10 @@ function BookingTable() {
             <BookingRow key={booking.id} booking={booking} />
           )}
         />
+
+        <Table.Footer>
+          <Pagination maxResults={count} />
+        </Table.Footer>
       </Table>
     </Menus>
   );
