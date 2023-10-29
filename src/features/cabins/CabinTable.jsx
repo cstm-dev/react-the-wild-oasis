@@ -1,6 +1,7 @@
 import CabinRow from "features/cabins/CabinRow";
 import useGetCabins from "features/cabins/useGetCabins.js";
 import { useSearchParams } from "react-router-dom";
+import Empty from "ui/Empty.jsx";
 import Menus from "ui/Menus.jsx";
 import Spinner from "ui/Spinner";
 import Table from "ui/Table.jsx";
@@ -27,6 +28,8 @@ function CabinTable() {
   );
 
   if (isLoading) return <Spinner />;
+
+  if (!cabins.length) return <Empty resource="cabins" />;
 
   return (
     <Menus>

@@ -64,6 +64,7 @@ function CabinRow({ cabin }) {
     const duplicateCabin = {
       name: `Copy of ${name}`,
       maxCapacity,
+      regularPrice,
       discount,
       image,
       description,

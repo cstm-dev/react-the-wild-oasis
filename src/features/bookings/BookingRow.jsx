@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Table from "ui/Table";
 import Tag from "ui/Tag";
 
+import PropTypes from "prop-types";
+import React from "react";
 import { formatCurrency, formatDistanceFromNow } from "utils/helpers";
 
 const Cabin = styled.div`
@@ -18,11 +20,11 @@ const Stacked = styled.div`
   flex-direction: column;
   gap: 0.2rem;
 
-  & span:first-child {
+  & span:nth-child(odd) {
     font-weight: 500;
   }
 
-  & span:last-child {
+  & span:nth-child(even) {
     color: var(--color-grey-500);
     font-size: 1.2rem;
   }
@@ -33,8 +35,17 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
+BookingRow.propTypes = {
+  booking: PropTypes.object,
+};
+
+function BookingRow({ booking }) {
+  const statusToTagName = {
+    unconfirmed: "blue",
+    "checked-in": "green",
+    "checked-out": "silver",
+  };
+  const {
     id: bookingId,
     created_at,
     startDate,
@@ -43,23 +54,21 @@ function BookingRow({
     numGuests,
     totalPrice,
     status,
-    guests: { fullName: guestName, email },
+    guests_bookings,
     cabins: { name: cabinName },
-  },
-}) {
-  const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
-  };
+  } = booking;
 
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
 
       <Stacked>
-        <span>{guestName}</span>
-        <span>{email}</span>
+        {guests_bookings.map((entry) => (
+          <React.Fragment key={entry.id}>
+            <span>{`${entry.guests.firstName} ${entry.guests.lastName}`}</span>
+            <span>{entry.guests.email}</span>
+          </React.Fragment>
+        ))}
       </Stacked>
 
       <Stacked>

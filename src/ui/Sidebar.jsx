@@ -1,3 +1,4 @@
+import Uploader from "data/Uploader.jsx";
 import styled from "styled-components";
 import Logo from "ui/Logo";
 import MainNav from "ui/MainNav";
@@ -18,6 +19,9 @@ function Sidebar() {
     <StyledSidebar>
       <Logo />
       <MainNav />
+
+      {/* TODO Remove after dev */}
+      <Uploader />
     </StyledSidebar>
   );
 }
