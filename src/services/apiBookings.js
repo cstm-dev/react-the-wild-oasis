@@ -121,6 +121,7 @@ async function updateBooking(id, obj) {
     console.error(error);
     throw new Error("Booking could not be updated");
   }
+
   return data;
 }
 

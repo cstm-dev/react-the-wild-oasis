@@ -10,6 +10,7 @@ import Tag from "ui/Tag";
 import BookingDataBox from "features/bookings/BookingDataBox.jsx";
 import useGetBooking from "features/bookings/useGetBooking.js";
 import { useMoveBack } from "hooks/useMoveBack";
+import { useNavigate } from "react-router-dom";
 import Empty from "ui/Empty.jsx";
 import Spinner from "ui/Spinner.jsx";
 
@@ -22,6 +23,7 @@ const HeadingGroup = styled.div`
 function BookingDetail() {
   const { data: booking, isLoading } = useGetBooking();
   const moveBack = useMoveBack();
+  const navigate = useNavigate();
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -46,6 +48,12 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
+        {status === "unconfirmed" && (
+          <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
+            Check-In
+          </Button>
+        )}
+
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>

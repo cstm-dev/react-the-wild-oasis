@@ -78,9 +78,9 @@ const Price = styled.div`
   margin-top: 2.4rem;
 
   background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+    props.$hasPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
   color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+    props.$hasPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
 
   & p:last-child {
     text-transform: uppercase;
@@ -119,7 +119,7 @@ function BookingDataBox({ booking }) {
     totalPrice,
     hasBreakfast,
     observations,
-    isPaid,
+    hasPaid,
     guests_bookings,
     cabins: { name: cabinName },
   } = booking;
@@ -130,7 +130,8 @@ function BookingDataBox({ booking }) {
         <div>
           <HiOutlineHomeModern />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {numNights} nights in Cabin <span>{cabinName}</span>{" "}
+            {numGuests > 1 ? `(${numGuests - 1} guests)` : ""}
           </p>
         </div>
 
@@ -152,10 +153,7 @@ function BookingDataBox({ booking }) {
                 alt={`Flag of ${entry.guests.country}`}
               />
             )}
-            <p>
-              {`${entry.guests.firstName} ${entry.guests.lastName}`}{" "}
-              {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
-            </p>
+            <p>{`${entry.guests.firstName} ${entry.guests.lastName}`} </p>
             <span>&bull;</span>
             <p>{entry.guests.email}</p>
             <span>&bull;</span>
@@ -176,7 +174,7 @@ function BookingDataBox({ booking }) {
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price isPaid={isPaid}>
+        <Price $hasPaid={hasPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(totalPrice)}
 
@@ -186,7 +184,7 @@ function BookingDataBox({ booking }) {
               )} breakfast)`}
           </DataItem>
 
-          <p>{isPaid ? "Paid" : "Will pay at property"}</p>
+          <p>{hasPaid ? "Paid" : "Will pay at property"}</p>
         </Price>
       </Section>
 
