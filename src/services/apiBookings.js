@@ -45,7 +45,7 @@ async function getBooking(id) {
     .from("bookings")
     .select("*, guests_bookings(*, guests(*)), cabins(*)")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(error);
@@ -127,13 +127,20 @@ async function updateBooking(id, obj) {
 
 async function deleteBooking(id) {
   // REMEMBER RLS POLICIES
-  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+  const { error: guestsBookingsError } = await supabase
+    .from("guests_bookings")
+    .delete()
+    .eq("bookingId", id);
 
-  if (error) {
-    console.error(error);
+  const { error: bookingsError } = await supabase
+    .from("bookings")
+    .delete()
+    .eq("id", id);
+
+  if (guestsBookingsError || bookingsError) {
+    console.error(guestsBookingsError || bookingsError);
     throw new Error("Booking could not be deleted");
   }
-  return data;
 }
 
 export {
