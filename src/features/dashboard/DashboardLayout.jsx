@@ -1,4 +1,5 @@
 import useGetCabins from "features/cabins/useGetCabins.js";
+import TodayActivity from "features/check_in_out/TodayActivity.jsx";
 import DurationChart from "features/dashboard/DurationChart.jsx";
 import SalesChart from "features/dashboard/SalesChart.jsx";
 import Stats from "features/dashboard/Stats.jsx";
@@ -20,11 +21,7 @@ function DashboardLayout() {
     isLoading: isLoadingLastBookings,
     numDays,
   } = useRecentBookings();
-  const {
-    data: lastStays,
-    isLoading: isLoadingLastStays,
-    confirmedStays,
-  } = useRecentStays();
+  const { isLoading: isLoadingLastStays, confirmedStays } = useRecentStays();
   const { data: cabins, isLoading: isLoadingCabins } = useGetCabins();
 
   if (isLoadingLastBookings || isLoadingLastStays || isLoadingCabins)
@@ -38,6 +35,7 @@ function DashboardLayout() {
         numDays={numDays}
         numCabins={cabins.length}
       />
+      <TodayActivity />
       <DurationChart confirmedStays={confirmedStays} />
       <SalesChart bookings={lastBookings} numDays={numDays} />
     </StyledDashboardLayout>

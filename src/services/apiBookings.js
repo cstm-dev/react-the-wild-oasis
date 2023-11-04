@@ -130,7 +130,7 @@ async function getStaysTodayActivity() {
       "*,  guests_bookings(guestId, guests(firstName, lastName, nationality, countryFlag))"
     )
     .or(
-      `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+      `and(status.eq.unconfirmed,startDate.eq.${getToday()}), and(status.eq.checked-in,endDate.eq.${getToday()})`
     )
     .order("created_at");
 
