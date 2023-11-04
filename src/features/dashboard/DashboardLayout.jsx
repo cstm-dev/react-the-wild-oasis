@@ -1,4 +1,5 @@
 import useGetCabins from "features/cabins/useGetCabins.js";
+import DurationChart from "features/dashboard/DurationChart.jsx";
 import SalesChart from "features/dashboard/SalesChart.jsx";
 import Stats from "features/dashboard/Stats.jsx";
 import useRecentBookings from "features/dashboard/useRecentBookings.js";
@@ -37,7 +38,7 @@ function DashboardLayout() {
         numDays={numDays}
         numCabins={cabins.length}
       />
-
+      <DurationChart confirmedStays={confirmedStays} />
       <SalesChart bookings={lastBookings} numDays={numDays} />
     </StyledDashboardLayout>
   );

@@ -10,7 +10,6 @@ const DashboardBox = styled.div`
 
   display: flex;
   flex-direction: column;
-  max-height: fit-content;
   gap: 2.4rem;
 `;
 
