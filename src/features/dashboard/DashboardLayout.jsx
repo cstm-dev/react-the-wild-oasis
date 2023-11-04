@@ -1,3 +1,5 @@
+import useGetCabins from "features/cabins/useGetCabins.js";
+import Stats from "features/dashboard/Stats.jsx";
 import useRecentBookings from "features/dashboard/useRecentBookings.js";
 import useRecentStays from "features/dashboard/useRecentStays.js";
 import styled from "styled-components";
@@ -11,18 +13,29 @@ const StyledDashboardLayout = styled.div`
 `;
 
 function DashboardLayout() {
-  const { data: lastBookings, isLoading: isLoadingLastBookings } =
-    useRecentBookings();
+  const {
+    data: lastBookings,
+    isLoading: isLoadingLastBookings,
+    numDays,
+  } = useRecentBookings();
   const {
     data: lastStays,
     isLoading: isLoadingLastStays,
     confirmedStays,
   } = useRecentStays();
+  const { data: cabins, isLoading: isLoadingCabins } = useGetCabins();
 
-  if (isLoadingLastBookings || isLoadingLastStays) return <Spinner />;
+  if (isLoadingLastBookings || isLoadingLastStays || isLoadingCabins)
+    return <Spinner />;
 
   return (
     <StyledDashboardLayout>
+      <Stats
+        bookings={lastBookings}
+        confirmedStays={confirmedStays}
+        numDays={numDays}
+        numCabins={cabins.length}
+      />
       <div>Statistics</div>
       <div>Today's activity</div>
       <div>Chart stay durations</div>
