@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import GlobalStyles from "styles/GlobalStyles";
 import AppLayout from "ui/AppLayout";
+import ProtectedRoute from "ui/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -24,7 +25,13 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="bookings" element={<Bookings />} />
