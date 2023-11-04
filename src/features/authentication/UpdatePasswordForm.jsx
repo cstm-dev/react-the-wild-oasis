@@ -4,22 +4,35 @@ import Form from "ui/Form";
 import FormRow from "ui/FormRow";
 import Input from "ui/Input";
 
-import { useUpdateUser } from "./useUpdateUser";
+import useGetCurrentUser from "features/authentication/useGetCurrentUser.js";
+import useUpdateCurrentUser from "features/authentication/useUpdateCurrentUser.js";
 
 function UpdatePasswordForm() {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
   const { errors } = formState;
 
-  const { updateUser, isUpdating } = useUpdateUser();
+  const {
+    data: { email },
+  } = useGetCurrentUser();
+  const { mutate: updateCurrentUser, isLoading: isUpdating } =
+    useUpdateCurrentUser();
 
   function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: reset });
+    updateCurrentUser({ password }, { onSuccess: reset });
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+      <Input
+        type="email"
+        value={email}
+        autoComplete="username"
+        hidden
+        readOnly
+      />
+
       <FormRow
-        label="Password (min 8 characters)"
+        label="New password (min 8 chars)"
         error={errors?.password?.message}
       >
         <Input
@@ -38,7 +51,7 @@ function UpdatePasswordForm() {
       </FormRow>
 
       <FormRow
-        label="Confirm password"
+        label="Confirm new password"
         error={errors?.passwordConfirm?.message}
       >
         <Input
@@ -53,8 +66,9 @@ function UpdatePasswordForm() {
           })}
         />
       </FormRow>
+
       <FormRow>
-        <Button onClick={reset} type="reset" variation="secondary">
+        <Button onClick={reset} type="reset" $variation="secondary">
           Cancel
         </Button>
         <Button disabled={isUpdating}>Update password</Button>
