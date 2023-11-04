@@ -11,7 +11,7 @@ function useLogin() {
     mutationFn: ({ email, password }) => login({ email, password }),
     onSuccess: (data) => {
       // Manually set the logged in user to prevent another getCurrentUser() after initial login
-      queryClient.setQueriesData(["auth"], data);
+      queryClient.setQueryData(["auth"], data.user);
       navigate("/dashboard", { replace: true });
     },
     onError: (err) => {
