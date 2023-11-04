@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "context/*": ["./src/context/*"],
       "data/*": ["./src/data/*"],
       "features/*": ["./src/features/*"],
       "hooks/*": ["./src/hooks/*"],

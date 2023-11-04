@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      context: "/src/context",
       data: "/src/data",
       features: "/src/features",
       hooks: "/src/hooks",
