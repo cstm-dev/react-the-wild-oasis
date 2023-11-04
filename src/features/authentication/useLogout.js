@@ -1,18 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { login } from "services/apiAuth.js";
+import { logout } from "services/apiAuth.js";
 
-function useLogin() {
+function useLogout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: ({ email, password }) => login({ email, password }),
-    onSuccess: (data) => {
-      // Manually set the logged in user to prevent another getCurrentUser() after initial login
-      queryClient.setQueriesData(["auth"], data);
-      navigate("/dashboard", { replace: true });
+    mutationFn: logout,
+    onSuccess: () => {
+      queryClient.removeQueries();
+      navigate("/login", { replace: true });
     },
     onError: (err) => {
       console.error("ERROR", err);
@@ -24,4 +23,4 @@ function useLogin() {
   return { mutate, isLoading };
 }
 
-export default useLogin;
+export default useLogout;
