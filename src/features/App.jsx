@@ -1,5 +1,4 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { DarkModeProvider } from "context/DarkModeContext.jsx";
 import queryClient from "features/QueryClient";
 import Account from "pages/Account";
@@ -22,7 +21,8 @@ function App() {
   return (
     <DarkModeProvider>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* TODO Remove for production */}
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 
         <GlobalStyles />
         <BrowserRouter>

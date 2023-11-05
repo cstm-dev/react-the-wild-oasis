@@ -9,9 +9,9 @@ import Table from "ui/Table";
 function BookingTable() {
   const { bookings, count, isLoading } = useGetBookings();
 
-  if (!bookings.length) return <Empty resource="bookings" />;
-
   if (isLoading) return <Spinner />;
+
+  if (!bookings.length) return <Empty resource="bookings" />;
 
   return (
     <Menus>

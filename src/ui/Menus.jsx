@@ -116,15 +116,13 @@ function Menu({ children }) {
   return <StyledMenu>{children}</StyledMenu>;
 }
 
-// BUG Toggle won't close and 20 re-renders
+// TODO Toggle causes all toggles in the table to re-renders
 function Toggle({ id }) {
   const { openId, handleClose, handleOpen, setPosition } =
     useContext(MenusContext);
 
-  // console.log(`openId: ${openId}`);
-  // console.log(`id: ${id}`);
-
   function handleClick(e) {
+    e.stopPropagation();
     const rectPos = e.target.closest("button").getBoundingClientRect();
 
     setPosition({
@@ -143,7 +141,7 @@ function Toggle({ id }) {
 }
 function List({ children, id }) {
   const { openId, position, handleClose } = useContext(MenusContext);
-  const { selector } = useOutsideClick(handleClose);
+  const { selector } = useOutsideClick(handleClose, false);
 
   if (openId !== id) return null;
 

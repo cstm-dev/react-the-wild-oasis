@@ -39,7 +39,7 @@ function BookingDetail() {
     useDeleteBooking();
 
   if (isLoading) return <Spinner />;
-  if (!booking) return <Empty resourceName="booking" />;
+  if (!booking) return <Empty resource="booking" />;
 
   const { id: bookingId, status } = booking;
 
